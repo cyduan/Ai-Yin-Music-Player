@@ -1,0 +1,25 @@
+<RCC>
+    <qresource prefix="/new/prefix1">
+        <file>icons/add.png</file>
+        <file>icons/dislike.png</file>
+        <file>icons/listCirculation.png</file>
+        <file>icons/next.png</file>
+        <file>icons/play.png</file>
+        <file>icons/previous.png</file>
+        <file>icons/random.png</file>
+        <file>icons/singalCirculation.png</file>
+        <file>icons/suspend.png</file>
+        <file>icons/delete.png</file>
+        <file>icons/delete_red.png</file>
+        <file>icons/add_blue.png</file>
+        <file>icons/next_blue.png</file>
+        <file>icons/previous_blue.png</file>
+        <file>icons/suspend_blue.png</file>
+        <file>icons/love.png</file>
+        <file>icons/play_blue.png</file>
+        <file>icons/sound.png</file>
+        <file>icons/sound_blue.png</file>
+        <file>icons/soundoff.png</file>
+        <file>icons/soundoff_blue.png</file>
+    </qresource>
+</RCC>
