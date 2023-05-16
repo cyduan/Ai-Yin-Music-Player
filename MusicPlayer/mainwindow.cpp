@@ -1,8 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QFileDialog>
-#include <QDebug>
-#include <QDir>
+
 
 int flag_love=0;
 int flag_play=0;
@@ -92,9 +90,18 @@ void MainWindow::on_pushButton_4_clicked() //播放和暂停按钮
         break;
     }
     case QMediaPlayer::PlaybackState::PausedState:
+    {
+        ui->pushButton_4->setToolTip("暂停");
+        ui->pushButton_4->setStyleSheet(
+            "QPushButton{"
+            "icon:url(:/new/prefix1/icons/suspend.png);"
+            "background-color:rgba(0,0,0,0);}"
+            "QPushButton:hover{"
+            "icon:url(:/new/prefix1/icons/suspend_blue.png);}"
+            );
         mediaPlayer->play();
         break;
-
+    }
     default:
         break;
     }
@@ -130,9 +137,11 @@ void MainWindow::on_pushButton_clicked() //添加文件按钮
     ui->listWidget->setCurrentRow(0);
 
     //将音乐的完整路径保存起来
+    //中文路径问题暂未解决
     for(auto file : musicList)
     {
-        playList.append(QUrl::fromLocalFile(path + "/" + file));
+        QUrl loadFile = QUrl::fromLocalFile(path + "/" + file);
+        playList.append((QUrl)loadFile);
     }
     qInfo()<<playList;
 }
@@ -144,6 +153,7 @@ void MainWindow::on_pushButton_3_clicked() //上一首按钮
     //让listWiget选中上一行
     curPlayIndex = (curPlayIndex - 1  + playList.size())%playList.size();
     ui->listWidget->setCurrentRow(curPlayIndex);
+    //mediaPlayer->stop();
     mediaPlayer->setSource(playList[curPlayIndex]);
     mediaPlayer->play();
 }
@@ -154,8 +164,31 @@ void MainWindow::on_pushButton_5_clicked() //下一首按钮
     //让listWiget选中下一行
     curPlayIndex = (curPlayIndex +1 )%playList.size();
     ui->listWidget->setCurrentRow(curPlayIndex);
+    //mediaPlayer->stop();
     mediaPlayer->setSource(playList[curPlayIndex]);
     mediaPlayer->play();
 
+}
+
+
+
+
+void MainWindow::on_listWidget_doubleClicked(const QModelIndex &index)
+{
+    curPlayIndex = index.row();
+    if(mediaPlayer->playbackState() == QMediaPlayer::PlaybackState::PausedState ||
+        mediaPlayer->playbackState() == QMediaPlayer::PlaybackState::StoppedState  )
+    {
+        ui->pushButton_4->setToolTip("暂停");
+        ui->pushButton_4->setStyleSheet(
+            "QPushButton{"
+            "icon:url(:/new/prefix1/icons/suspend.png);"
+            "background-color:rgba(0,0,0,0);}"
+            "QPushButton:hover{"
+            "icon:url(:/new/prefix1/icons/suspend_blue.png);}"
+            );
+    }
+    mediaPlayer->setSource(playList[curPlayIndex]);
+    mediaPlayer->play();
 }
 

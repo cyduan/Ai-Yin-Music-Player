@@ -5,6 +5,10 @@
 #include <QUrl>
 #include <QMediaPlayer>
 #include <QAudioOutput>
+#include <QFileDialog>
+#include <QDebug>
+#include <QDir>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -30,6 +34,10 @@ private slots:
     void on_pushButton_3_clicked();
 
     void on_pushButton_5_clicked();
+
+
+
+    void on_listWidget_doubleClicked(const QModelIndex &index);
 
 private:
     Ui::MainWindow *ui;
