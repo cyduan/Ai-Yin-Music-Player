@@ -1,14 +1,27 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QFileDialog>
+#include <QDebug>
+#include <QDir>
+
 int flag_love=0;
 int flag_play=0;
 int flag_mode=0;
 int flag_sound=0;
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    //如何播放音乐
+    //初始化output对象
+    audioOutput = new QAudioOutput(this);
+    //初始化媒体播放对象
+    mediaPlayer = new QMediaPlayer(this);
+    mediaPlayer->setAudioOutput(audioOutput);
+
+
 }
 
 MainWindow::~MainWindow()
@@ -17,7 +30,7 @@ MainWindow::~MainWindow()
 }
 
 
-void MainWindow::on_pushButton_2_clicked()
+void MainWindow::on_pushButton_2_clicked() //喜不喜欢按钮
 {
     switch (flag_love) {
     case 0:
@@ -36,10 +49,12 @@ void MainWindow::on_pushButton_2_clicked()
 }
 
 
-void MainWindow::on_pushButton_4_clicked()
+void MainWindow::on_pushButton_4_clicked() //播放和暂停按钮
 {
-    switch (flag_play) {
-    case 0:
+    switch (mediaPlayer->playbackState())
+    {
+    case QMediaPlayer::PlaybackState::StoppedState:
+    {
         ui->pushButton_4->setToolTip("暂停");
         ui->pushButton_4->setStyleSheet(
         "QPushButton{"
@@ -49,8 +64,21 @@ void MainWindow::on_pushButton_4_clicked()
         "icon:url(:/new/prefix1/icons/suspend_blue.png);}"
         );
         flag_play=(flag_play+1)%2;
+        if(playList.size() == 0)
+        {
+            break;
+        }
+        //播放当前选中的音乐
+        curPlayIndex = ui->listWidget->currentRow();
+        //给播放器设置音乐
+        mediaPlayer->setSource(playList[curPlayIndex]);
+        //播放
+        mediaPlayer->play();
+
         break;
-    case 1:
+    }
+    case QMediaPlayer::PlaybackState::PlayingState:
+    {
         ui->pushButton_4->setToolTip("播放");
         ui->pushButton_4->setStyleSheet(
                     "QPushButton{"
@@ -60,14 +88,20 @@ void MainWindow::on_pushButton_4_clicked()
                     "icon:url(:/new/prefix1/icons/play_blue.png);}"
         );
         flag_play=(flag_play+1)%2;
+        mediaPlayer->pause();
         break;
+    }
+    case QMediaPlayer::PlaybackState::PausedState:
+        mediaPlayer->play();
+        break;
+
     default:
         break;
     }
 }
 
 
-void MainWindow::on_pushButton_8_clicked()
+void MainWindow::on_pushButton_8_clicked() //声音按钮
 {
     switch (flag_sound) {
     case 0:
@@ -76,5 +110,52 @@ void MainWindow::on_pushButton_8_clicked()
     default:
         break;
     }
+}
+
+
+void MainWindow::on_pushButton_clicked() //添加文件按钮
+{
+    //qInfo()<<"Hello, Qt";
+
+    //打开文件对话框，让用户选择音乐所在的目录
+    auto path = QFileDialog::getExistingDirectory(this,"请选择音乐所在目录","D:\\music");
+    //qInfo()<<path;
+    //根据所给路径，获取其中所有的.mp3和.wav文件
+    QDir dir(path);
+    auto musicList = dir.entryList(QStringList()<<"*.mp3"<<"*.wav");
+    //qInfo()<<musicList;
+    //将音乐名字放在listWidget中展示
+    ui->listWidget->addItems(musicList);
+    //默认选中第一个
+    ui->listWidget->setCurrentRow(0);
+
+    //将音乐的完整路径保存起来
+    for(auto file : musicList)
+    {
+        playList.append(QUrl::fromLocalFile(path + "/" + file));
+    }
+    qInfo()<<playList;
+}
+
+
+void MainWindow::on_pushButton_3_clicked() //上一首按钮
+{
+
+    //让listWiget选中上一行
+    curPlayIndex = (curPlayIndex - 1  + playList.size())%playList.size();
+    ui->listWidget->setCurrentRow(curPlayIndex);
+    mediaPlayer->setSource(playList[curPlayIndex]);
+    mediaPlayer->play();
+}
+
+
+void MainWindow::on_pushButton_5_clicked() //下一首按钮
+{
+    //让listWiget选中下一行
+    curPlayIndex = (curPlayIndex +1 )%playList.size();
+    ui->listWidget->setCurrentRow(curPlayIndex);
+    mediaPlayer->setSource(playList[curPlayIndex]);
+    mediaPlayer->play();
+
 }
 
