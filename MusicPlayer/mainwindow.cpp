@@ -19,6 +19,22 @@ MainWindow::MainWindow(QWidget *parent)
     mediaPlayer = new QMediaPlayer(this);
     mediaPlayer->setAudioOutput(audioOutput);
 
+    //获取当前媒体总时长
+    connect(mediaPlayer,&QMediaPlayer::durationChanged,this,[=](qint64 duration)
+    {
+        ui->totalLable->setText(QString("%1:%2").arg((duration/1000)/60,2,10,QChar('0')).arg((duration/1000)%60));
+        ui->playCourseSlider->setRange(0,duration);
+    });
+    //获取当前媒体播放时长
+    connect(mediaPlayer,&QMediaPlayer::positionChanged,this,[=](qint64 pos)
+    {
+
+        ui->curLabel->setText(QString("%1:%2").arg((pos/1000)/60,2,10,QChar('0')).arg((pos/1000)%60,2,10,QChar('0')));
+        ui->playCourseSlider->setValue(pos);
+    });
+
+    //拖动滑块改变音乐进度
+    connect(ui->playCourseSlider,&QSlider::sliderMoved,mediaPlayer,&QMediaPlayer::setPosition);
 
 }
 
@@ -49,6 +65,10 @@ void MainWindow::on_pushButton_2_clicked() //喜不喜欢按钮
 
 void MainWindow::on_pushButton_4_clicked() //播放和暂停按钮
 {
+    if(playList.size() == 0)
+    {
+        return;
+    }
     switch (mediaPlayer->playbackState())
     {
     case QMediaPlayer::PlaybackState::StoppedState:
