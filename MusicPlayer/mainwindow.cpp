@@ -36,6 +36,19 @@ MainWindow::MainWindow(QWidget *parent)
     //拖动滑块改变音乐进度
     connect(ui->playCourseSlider,&QSlider::sliderMoved,mediaPlayer,&QMediaPlayer::setPosition);
 
+    //调整音量
+    ui->VolumeSlider->setRange(0,100);
+    audioOutput->setVolume(0.4);
+    ui->VolumeSlider->setValue(audioOutput->volume()*100);
+    connect(audioOutput,&QAudioOutput::volumeChanged,this,[=](double vol)
+            {
+                ui->VolumeSlider->setValue(vol*100);
+            });
+    connect(ui->VolumeSlider,&QSlider::sliderMoved,audioOutput,[=](qint64 v_pos)
+            {
+                audioOutput->setVolume((float)v_pos/100);
+            });
+
 }
 
 MainWindow::~MainWindow()
@@ -163,7 +176,7 @@ void MainWindow::on_pushButton_clicked() //添加文件按钮
         QUrl loadFile = QUrl::fromLocalFile(path + "/" + file);
         playList.append((QUrl)loadFile);
     }
-    qInfo()<<playList;
+    //qInfo()<<playList;
 }
 
 

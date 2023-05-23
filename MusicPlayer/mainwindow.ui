@@ -381,7 +381,7 @@ background-color:rgba(0,0,0,0);
      </item>
     </layout>
    </widget>
-   <widget class="QSlider" name="verticalSlider">
+   <widget class="QSlider" name="VolumeSlider">
     <property name="geometry">
      <rect>
       <x>720</x>
@@ -420,7 +420,7 @@ background-color:rgba(0,0,0,0);
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>90</x>
