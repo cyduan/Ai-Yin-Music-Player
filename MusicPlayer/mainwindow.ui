@@ -13,6 +13,21 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget#MainWindow
+{
+	background-image: url(:/new/prefix1/background/wallhaven-q2yx9l.jpg)
+}
+
+*{
+	border: none;
+}
+QPushButton,QListWidget
+{
+	border: none;
+	background: transparent;
+}</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">

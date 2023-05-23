@@ -22,5 +22,6 @@
         <file>icons/soundoff.png</file>
         <file>icons/soundoff_blue.png</file>
         <file>icons/AiYin.ico</file>
+        <file>background/wallhaven-q2yx9l.jpg</file>
     </qresource>
 </RCC>
