@@ -22,5 +22,6 @@
         <file>icons/soundoff.png</file>
         <file>icons/soundoff_blue.png</file>
         <file>icons/AiYin.ico</file>
+        <file>background/background1.jpg</file>
     </qresource>
 </RCC>

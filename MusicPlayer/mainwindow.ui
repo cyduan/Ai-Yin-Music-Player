@@ -13,6 +13,16 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget#MainWindow
+{
+	background-image:url(:/new/prefix1/background/background1.jpg);
+}
+*{
+	border: none;
+	background:transparent;
+}</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
@@ -496,7 +506,7 @@ background-color:rgba(0,0,0,0);
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>37</height>
+     <height>17</height>
     </rect>
    </property>
   </widget>
