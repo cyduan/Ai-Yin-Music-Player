@@ -1,9 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include <QFileDialog>
+#include <QDebug>
+#include <QDir>
 
 int flag_love=0;
-int flag_play=0;
 int flag_mode=0;
 int flag_sound=0;
 
@@ -18,37 +19,24 @@ MainWindow::MainWindow(QWidget *parent)
     //初始化媒体播放对象
     mediaPlayer = new QMediaPlayer(this);
     mediaPlayer->setAudioOutput(audioOutput);
+    //设置默认音量
+    audioOutput->setVolume(0.5);
+    ui->volumeSpacer->setRange(0,100);
+    ui->volumeSpacer->setValue(50);
 
-    //获取当前媒体总时长
-    connect(mediaPlayer,&QMediaPlayer::durationChanged,this,[=](qint64 duration)
-    {
-        ui->totalLable->setText(QString("%1:%2").arg((duration/1000)/60,2,10,QChar('0')).arg((duration/1000)%60));
-        ui->playCourseSlider->setRange(0,duration);
+    //获取音乐总长度,同时显示音乐名称
+    connect(mediaPlayer,&QMediaPlayer::durationChanged,this,[=](qint64 duration){
+        ui->totalLabel->setText(QString("%1：%2").arg(duration/1000/60,2,10,QChar('0')).arg(duration/1000%60,2,10,QChar('0')));
+        ui->playSpacer->setRange(0,duration);
+        ui->songNameLabel->setText(ui->listWidget->currentItem()->text());
     });
-    //获取当前媒体播放时长
-    connect(mediaPlayer,&QMediaPlayer::positionChanged,this,[=](qint64 pos)
-    {
-
-        ui->curLabel->setText(QString("%1:%2").arg((pos/1000)/60,2,10,QChar('0')).arg((pos/1000)%60,2,10,QChar('0')));
-        ui->playCourseSlider->setValue(pos);
+    //获取当前时长
+    connect(mediaPlayer,&QMediaPlayer::positionChanged,this,[=](qint64 now){
+        ui->curLabel->setText(QString("%1：%2").arg(now/1000/60,2,10,QChar('0')).arg(now/1000%60,2,10,QChar('0')));
+        ui->playSpacer->setValue(now);
     });
-
-    //拖动滑块改变音乐进度
-    connect(ui->playCourseSlider,&QSlider::sliderMoved,mediaPlayer,&QMediaPlayer::setPosition);
-
-    //调整音量
-    ui->VolumeSlider->setRange(0,100);
-    audioOutput->setVolume(0.4);
-    ui->VolumeSlider->setValue(audioOutput->volume()*100);
-    connect(audioOutput,&QAudioOutput::volumeChanged,this,[=](double vol)
-            {
-                ui->VolumeSlider->setValue(vol*100);
-            });
-    connect(ui->VolumeSlider,&QSlider::sliderMoved,audioOutput,[=](qint64 v_pos)
-            {
-                audioOutput->setVolume((float)v_pos/100);
-            });
-
+    //拖动进度条
+    connect(ui->playSpacer,&QSlider::sliderMoved,mediaPlayer,&QMediaPlayer::setPosition);
 }
 
 MainWindow::~MainWindow()
@@ -56,7 +44,17 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
+void MainWindow:: setButtonToPause() //将按钮设置为暂停样式
+{
+    ui->pushButton_4->setToolTip("暂停");
+    ui->pushButton_4->setStyleSheet(
+    "QPushButton{"
+    "icon:url(:/new/prefix1/icons/suspend.png);"
+    "background-color:rgba(0,0,0,0);}"
+    "QPushButton:hover{"
+    "icon:url(:/new/prefix1/icons/suspend_blue.png);}"
+    );
+}
 void MainWindow::on_pushButton_2_clicked() //喜不喜欢按钮
 {
     switch (flag_love) {
@@ -78,34 +76,21 @@ void MainWindow::on_pushButton_2_clicked() //喜不喜欢按钮
 
 void MainWindow::on_pushButton_4_clicked() //播放和暂停按钮
 {
-    if(playList.size() == 0)
-    {
-        return;
-    }
     switch (mediaPlayer->playbackState())
     {
     case QMediaPlayer::PlaybackState::StoppedState:
     {
-        ui->pushButton_4->setToolTip("暂停");
-        ui->pushButton_4->setStyleSheet(
-        "QPushButton{"
-        "icon:url(:/new/prefix1/icons/suspend.png);"
-        "background-color:rgba(0,0,0,0);}"
-        "QPushButton:hover{"
-        "icon:url(:/new/prefix1/icons/suspend_blue.png);}"
-        );
-        flag_play=(flag_play+1)%2;
         if(playList.size() == 0)
         {
             break;
         }
+        setButtonToPause();
         //播放当前选中的音乐
         curPlayIndex = ui->listWidget->currentRow();
         //给播放器设置音乐
         mediaPlayer->setSource(playList[curPlayIndex]);
         //播放
         mediaPlayer->play();
-
         break;
     }
     case QMediaPlayer::PlaybackState::PlayingState:
@@ -118,23 +103,14 @@ void MainWindow::on_pushButton_4_clicked() //播放和暂停按钮
                     "QPushButton:hover{"
                     "icon:url(:/new/prefix1/icons/play_blue.png);}"
         );
-        flag_play=(flag_play+1)%2;
         mediaPlayer->pause();
         break;
     }
     case QMediaPlayer::PlaybackState::PausedState:
-    {
-        ui->pushButton_4->setToolTip("暂停");
-        ui->pushButton_4->setStyleSheet(
-            "QPushButton{"
-            "icon:url(:/new/prefix1/icons/suspend.png);"
-            "background-color:rgba(0,0,0,0);}"
-            "QPushButton:hover{"
-            "icon:url(:/new/prefix1/icons/suspend_blue.png);}"
-            );
+        setButtonToPause();
         mediaPlayer->play();
         break;
-    }
+
     default:
         break;
     }
@@ -145,7 +121,26 @@ void MainWindow::on_pushButton_8_clicked() //声音按钮
 {
     switch (flag_sound) {
     case 0:
-        ui->pushButton_8->setToolTip("声音");
+        ui->pushButton_8->setToolTip("取消静音");
+        ui->pushButton_8->setStyleSheet(
+                    "QPushButton{"
+                    "icon:url(:/new/prefix1/icons/soundoff.png);"
+                    "background-color:rgba(0,0,0,0);}"
+                    "QPushButton:hover{"
+                    "icon:url(:/new/prefix1/icons/soundoff_blue.png);}"
+        );
+        ui->volumeSpacer->setValue(0);
+        break;
+    case 1:
+        ui->pushButton_8->setToolTip("静音");
+        ui->pushButton_8->setStyleSheet(
+                    "QPushButton{"
+                    "icon:url(:/new/prefix1/icons/sound.png);"
+                    "background-color:rgba(0,0,0,0);}"
+                    "QPushButton:hover{"
+                    "icon:url(:/new/prefix1/icons/sound_blue.png);}"
+        );
+        ui->volumeSpacer->setValue(20);
         break;
     default:
         break;
@@ -158,11 +153,11 @@ void MainWindow::on_pushButton_clicked() //添加文件按钮
     //qInfo()<<"Hello, Qt";
 
     //打开文件对话框，让用户选择音乐所在的目录
-    auto path = QFileDialog::getExistingDirectory(this,"请选择音乐所在目录","D:\\music");
+    auto path = QFileDialog::getExistingDirectory(this,"请选择音乐所在目录","C:\\");
     //qInfo()<<path;
-    //根据所给路径，获取其中所有的.mp3和.wav文件
+    //根据所给路径，获取其中所有的常见音乐格式文件
     QDir dir(path);
-    auto musicList = dir.entryList(QStringList()<<"*.mp3"<<"*.wav");
+    auto musicList = dir.entryList(QStringList()<<"*.mp3"<<"*.wav"<<"*.flac"<<"*.wma"<<"*.m4a");
     //qInfo()<<musicList;
     //将音乐名字放在listWidget中展示
     ui->listWidget->addItems(musicList);
@@ -170,58 +165,117 @@ void MainWindow::on_pushButton_clicked() //添加文件按钮
     ui->listWidget->setCurrentRow(0);
 
     //将音乐的完整路径保存起来
-    //中文路径问题暂未解决
     for(auto file : musicList)
     {
-        QUrl loadFile = QUrl::fromLocalFile(path + "/" + file);
-        playList.append((QUrl)loadFile);
+        playList.append(QUrl::fromLocalFile(path + "/" + file));
     }
-    //qInfo()<<playList;
 }
 
 
 void MainWindow::on_pushButton_3_clicked() //上一首按钮
 {
-
+    if(playList.size() == 0)
+    {
+        return;
+    }
     //让listWiget选中上一行
-    curPlayIndex = (curPlayIndex - 1  + playList.size())%playList.size();
+    curPlayIndex = (curPlayIndex - 1+playList.size())%playList.size();
     ui->listWidget->setCurrentRow(curPlayIndex);
-    //mediaPlayer->stop();
     mediaPlayer->setSource(playList[curPlayIndex]);
     mediaPlayer->play();
+    setButtonToPause();
 }
 
 
 void MainWindow::on_pushButton_5_clicked() //下一首按钮
 {
+    if(playList.size() == 0)
+    {
+        return;
+    }
     //让listWiget选中下一行
+
     curPlayIndex = (curPlayIndex +1 )%playList.size();
     ui->listWidget->setCurrentRow(curPlayIndex);
-    //mediaPlayer->stop();
     mediaPlayer->setSource(playList[curPlayIndex]);
     mediaPlayer->play();
-
+    setButtonToPause();
 }
 
 
 
 
-void MainWindow::on_listWidget_doubleClicked(const QModelIndex &index)
+
+
+void MainWindow::on_listWidget_doubleClicked(const QModelIndex &index)//双击播放
 {
-    curPlayIndex = index.row();
-    if(mediaPlayer->playbackState() == QMediaPlayer::PlaybackState::PausedState ||
-        mediaPlayer->playbackState() == QMediaPlayer::PlaybackState::StoppedState  )
-    {
-        ui->pushButton_4->setToolTip("暂停");
-        ui->pushButton_4->setStyleSheet(
-            "QPushButton{"
-            "icon:url(:/new/prefix1/icons/suspend.png);"
-            "background-color:rgba(0,0,0,0);}"
-            "QPushButton:hover{"
-            "icon:url(:/new/prefix1/icons/suspend_blue.png);}"
-            );
-    }
+    curPlayIndex=index.row();
     mediaPlayer->setSource(playList[curPlayIndex]);
     mediaPlayer->play();
+    setButtonToPause();
 }
+
+
+
+/*void MainWindow::on_volumeSpacer_sliderMoved(int position)//修改音量大小
+{
+    float vol=(float)position/(float)100;
+    if(vol==0){
+        flag_sound=1;
+    }
+    audioOutput->setVolume(vol);
+}*/
+
+
+
+/*void MainWindow::on_listWidget_clicked(const QModelIndex &index)
+{
+    deleteIndex=index.row();
+}*/
+
+void MainWindow::on_volumeSpacer_valueChanged(int value)
+{
+    float vol=(float)value/(float)100;
+    if(vol==0){
+        ui->pushButton_8->setToolTip("取消静音");
+
+        ui->pushButton_8->setStyleSheet(
+                    "QPushButton{"
+                    "icon:url(:/new/prefix1/icons/soundoff.png);"
+                    "background-color:rgba(0,0,0,0);}"
+                    "QPushButton:hover{"
+                    "icon:url(:/new/prefix1/icons/soundoff_blue.png);}"
+        );
+        flag_sound=1;
+    }
+    else{
+        ui->pushButton_8->setToolTip("静音");
+
+        ui->pushButton_8->setStyleSheet(
+                    "QPushButton{"
+                    "icon:url(:/new/prefix1/icons/sound.png);"
+                    "background-color:rgba(0,0,0,0);}"
+                    "QPushButton:hover{"
+                    "icon:url(:/new/prefix1/icons/sound_blue.png);}"
+        );
+        flag_sound=0;
+    }
+    audioOutput->setVolume(vol);
+}
+
+
+void MainWindow::on_pushButton_7_clicked()
+{
+
+    auto item=ui->listWidget->currentItem();
+    if (!item)
+    {
+        return;
+    }
+    auto index=ui->listWidget->row(item);
+    playList.removeAt(index);
+    ui->listWidget->takeItem(index);
+}
+
+
 

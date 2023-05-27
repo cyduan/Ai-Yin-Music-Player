@@ -13,21 +13,6 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true">QWidget#MainWindow
-{
-	background-image: url(:/new/prefix1/background/wallhaven-q2yx9l.jpg)
-}
-
-*{
-	border: none;
-}
-QPushButton,QListWidget
-{
-	border: none;
-	background: transparent;
-}</string>
-  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
@@ -396,11 +381,11 @@ background-color:rgba(0,0,0,0);
      </item>
     </layout>
    </widget>
-   <widget class="QSlider" name="VolumeSlider">
+   <widget class="QSlider" name="volumeSpacer">
     <property name="geometry">
      <rect>
-      <x>720</x>
-      <y>330</y>
+      <x>713</x>
+      <y>340</y>
       <width>18</width>
       <height>160</height>
      </rect>
@@ -416,13 +401,13 @@ background-color:rgba(0,0,0,0);
     <property name="geometry">
      <rect>
       <x>90</x>
-      <y>0</y>
+      <y>20</y>
       <width>501</width>
-      <height>441</height>
+      <height>391</height>
      </rect>
     </property>
    </widget>
-   <widget class="QSlider" name="playCourseSlider">
+   <widget class="QSlider" name="playSpacer">
     <property name="geometry">
      <rect>
       <x>90</x>
@@ -439,16 +424,21 @@ background-color:rgba(0,0,0,0);
     <property name="geometry">
      <rect>
       <x>90</x>
-      <y>450</y>
+      <y>430</y>
       <width>501</width>
-      <height>22</height>
+      <height>29</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QLabel" name="curLabel">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
        <property name="text">
-        <string>00:00</string>
+        <string>00：00</string>
        </property>
       </widget>
      </item>
@@ -466,9 +456,34 @@ background-color:rgba(0,0,0,0);
       </spacer>
      </item>
      <item>
-      <widget class="QLabel" name="totalLable">
+      <widget class="QLabel" name="songNameLabel">
        <property name="text">
-        <string>00:00</string>
+        <string>暂无音乐</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="totalLabel">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>00：00</string>
        </property>
       </widget>
      </item>
@@ -481,7 +496,7 @@ background-color:rgba(0,0,0,0);
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>17</height>
+     <height>37</height>
     </rect>
    </property>
   </widget>
