@@ -3,6 +3,7 @@
 #include <QFileDialog>
 #include <QDebug>
 #include <QDir>
+#include <QRandomGenerator64>
 
 int flag_love=0;
 int flag_mode=0;
@@ -37,6 +38,35 @@ MainWindow::MainWindow(QWidget *parent)
     });
     //拖动进度条
     connect(ui->playSpacer,&QSlider::sliderMoved,mediaPlayer,&QMediaPlayer::setPosition);
+    //自动播放下一首
+    connect(mediaPlayer, &QMediaPlayer::playbackStateChanged, this, [=](){
+        if(mediaPlayer->playbackState() == QMediaPlayer::PlaybackState::StoppedState)
+        {   //筛选播放模式
+            if(flag_mode==0){//列表循环
+            curPlayIndex = (curPlayIndex +1 )%playList.size();
+            ui->listWidget->setCurrentRow(curPlayIndex);
+            mediaPlayer->setSource(playList[curPlayIndex]);
+            mediaPlayer->play();
+            setButtonToPause();}
+            else if(flag_mode==1){//单曲循环
+            /*ui->listWidget->setCurrentRow(curPlayIndex);
+            mediaPlayer->setSource(playList[curPlayIndex]);*/
+            mediaPlayer->play();
+            setButtonToPause();}
+            else if(flag_mode==2){//随机播放
+            int number=0;
+            while (true) {
+                number=QRandomGenerator::global()->bounded(0,playList.size());
+                if(number!=curPlayIndex)
+                    break;
+            }
+            curPlayIndex = number;
+            ui->listWidget->setCurrentRow(curPlayIndex);
+            mediaPlayer->setSource(playList[curPlayIndex]);
+            mediaPlayer->play();
+            setButtonToPause();}
+        }
+    });
 }
 
 MainWindow::~MainWindow()
@@ -264,7 +294,7 @@ void MainWindow::on_volumeSpacer_valueChanged(int value)
 }
 
 
-void MainWindow::on_pushButton_7_clicked()
+void MainWindow::on_pushButton_7_clicked()//删除功能
 {
 
     auto item=ui->listWidget->currentItem();
@@ -278,4 +308,46 @@ void MainWindow::on_pushButton_7_clicked()
 }
 
 
+
+
+void MainWindow::on_pushButton_6_clicked()//播放模式调整
+{
+    switch (flag_mode) {
+    case 0:
+        ui->pushButton_6->setToolTip("单曲循环");
+        ui->pushButton_6->setStyleSheet(
+                    "QPushButton{"
+                    "icon:url(:/new/prefix1/icons/singleCirculation.png);"
+                    "background-color:rgba(0,0,0,0);}"
+                    "QPushButton:hover{"
+                    "icon:url(:/new/prefix1/icons/singleCirculation_blue.png);}"
+            );
+        flag_mode=1;
+        break;
+    case 1:
+        ui->pushButton_6->setToolTip("随机播放");
+        ui->pushButton_6->setStyleSheet(
+                    "QPushButton{"
+                    "icon:url(:/new/prefix1/icons/random.png);"
+                    "background-color:rgba(0,0,0,0);}"
+                    "QPushButton:hover{"
+                    "icon:url(:/new/prefix1/icons/random_blue.png);}"
+            );
+        flag_mode=2;
+        break;
+    case 2:
+        ui->pushButton_6->setToolTip("列表循环");
+        ui->pushButton_6->setStyleSheet(
+                    "QPushButton{"
+                    "icon:url(:/new/prefix1/icons/listCirculation.png);"
+                    "background-color:rgba(0,0,0,0);}"
+                    "QPushButton:hover{"
+                    "icon:url(:/new/prefix1/icons/listCirculation_blue.png);}"
+            );
+        flag_mode=0;
+        break;
+    default:
+        break;
+    }
+}
 
