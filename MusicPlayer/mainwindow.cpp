@@ -45,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent)
             if(flag_mode==0){//列表循环
             curPlayIndex = (curPlayIndex +1 )%playList.size();
             ui->listWidget->setCurrentRow(curPlayIndex);
-            mediaPlayer->setSource(playList[curPlayIndex]);
+            mediaPlayer->setSource  (playList[curPlayIndex]);
             mediaPlayer->play();
             setButtonToPause();}
             else if(flag_mode==1){//单曲循环
