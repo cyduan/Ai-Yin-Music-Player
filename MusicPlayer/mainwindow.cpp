@@ -39,8 +39,8 @@ MainWindow::MainWindow(QWidget *parent)
     //拖动进度条
     connect(ui->playSpacer,&QSlider::sliderMoved,mediaPlayer,&QMediaPlayer::setPosition);
     //自动播放下一首
-    connect(mediaPlayer, &QMediaPlayer::playbackStateChanged, this, [=](){
-        if(mediaPlayer->playbackState() == QMediaPlayer::PlaybackState::StoppedState)
+    connect(mediaPlayer, &QMediaPlayer::mediaStatusChanged, this, [=](){
+        if(mediaPlayer->mediaStatus() == QMediaPlayer::MediaStatus::EndOfMedia)
         {   //筛选播放模式
             if(flag_mode==0){//列表循环
             curPlayIndex = (curPlayIndex +1 )%playList.size();
