@@ -32,42 +32,69 @@
   <property name="modal">
    <bool>false</bool>
   </property>
-  <widget class="QLabel" name="label">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>600</width>
-     <height>360</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:20pt;&quot;&gt;帮助文档&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;制作人&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;：&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;使用方法&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;：点击&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;点击“+”按钮选择文件夹&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButton">
-   <property name="geometry">
-    <rect>
-     <x>520</x>
-     <y>360</y>
-     <width>61</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="icon">
-    <iconset resource="icons.qrc">
-     <normaloff>:/new/prefix1/icons/return.png</normaloff>:/new/prefix1/icons/return.png</iconset>
-   </property>
-   <property name="iconSize">
-    <size>
-     <width>30</width>
-     <height>30</height>
-    </size>
-   </property>
-  </widget>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="sizeAdjustPolicy">
+      <enum>QAbstractScrollArea::AdjustToContents</enum>
+     </property>
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>578</width>
+        <height>574</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:20pt;&quot;&gt;帮助文档&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;项目名称&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;：艾音播放器（Ai-Yin music player）&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;制作人&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;：段成业、苏行键&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;使用方法&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;：&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;1. 点击&lt;/span&gt;&lt;img src=&quot;:/new/prefix1/icons/add.png&quot; width=&quot;20&quot; height=&quot;20&quot;/&gt;，&lt;span style=&quot; font-size:12pt;&quot;&gt;在文件对话框中选择一个文件夹，之后列表上会显示该文件夹里的所有音乐&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;2. 点击列表上的音乐播放相应音乐，或者点击&lt;/span&gt;&lt;img src=&quot;:/new/prefix1/icons/play.png&quot; width=&quot;20&quot; height=&quot;20&quot;/&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;播放当前选中的音乐&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;3. 在&lt;/span&gt;&lt;img src=&quot;:/new/prefix1/icons/suspend.png&quot; width=&quot;20&quot; height=&quot;20&quot;/&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;播放状态下继续点击该按钮，可暂停播放&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;4. 可以拉动横向进度条更改播放进度&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;5. 可以拉动右侧的纵向滑动条修改音量，或者点击&lt;/span&gt;&lt;img src=&quot;:/new/prefix1/icons/sound.png&quot; width=&quot;20&quot; height=&quot;20&quot;/&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;禁音&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;6. 点击&lt;/span&gt;&lt;img src=&quot;:/new/prefix1/icons/delete.png&quot; width=&quot;20&quot; height=&quot;20&quot;/&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;可删掉不喜欢的音乐&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;7. 点击&lt;/span&gt;&lt;img src=&quot;:/new/prefix1/icons/listCirculation.png&quot; width=&quot;20&quot; height=&quot;20&quot;/&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;可更改播放模式，可选的模式有列表循环（默认）、单曲循环和随机播放&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;注意事项：&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;1. 在某些设备上（比如有些Windows操作系统的电脑），会因为编码问题而导致无法播放含有&lt;/span&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;中文路径&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;的音乐，进而导致一些bug的发生&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;2. ……&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="pushButton">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="icons.qrc">
+       <normaloff>:/new/prefix1/icons/return.png</normaloff>:/new/prefix1/icons/return.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>30</width>
+       <height>30</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources>
   <include location="icons.qrc"/>
