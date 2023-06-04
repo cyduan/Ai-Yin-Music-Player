@@ -16,7 +16,7 @@
   <property name="styleSheet">
    <string notr="true">QWidget#MainWindow
 {
-	background-image:url(:/new/prefix1/background/background1.jpg);
+	background-image:url(:/new/prefix1/background/background2.png);
 }
 *{
 	border: none;

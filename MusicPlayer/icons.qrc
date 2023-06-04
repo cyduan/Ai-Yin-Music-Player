@@ -29,5 +29,6 @@
         <file>icons/help.png</file>
         <file>icons/help_blue.png</file>
         <file>icons/return.png</file>
+        <file>background/background2.png</file>
     </qresource>
 </RCC>
