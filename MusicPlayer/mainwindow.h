@@ -5,6 +5,7 @@
 #include <QUrl>
 #include <QMediaPlayer>
 #include <QAudioOutput>
+#include "helpdialog.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -44,6 +45,8 @@ private slots:
 
     void on_pushButton_6_clicked();
 
+    void on_helpButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     QList<QUrl> playList; //播放列表
@@ -51,5 +54,7 @@ private:
     QMediaPlayer* mediaPlayer;
     int curPlayIndex = 0;
     int deleteIndex=0;
+
+    HelpDialog* helpdialog; //帮助界面
 };
 #endif // MAINWINDOW_H

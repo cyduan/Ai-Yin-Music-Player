@@ -67,6 +67,10 @@ MainWindow::MainWindow(QWidget *parent)
             setButtonToPause();}
         }
     });
+
+
+    //帮助界面
+    helpdialog = new HelpDialog(this);
 }
 
 MainWindow::~MainWindow()
@@ -349,5 +353,21 @@ void MainWindow::on_pushButton_6_clicked()//播放模式调整
     default:
         break;
     }
+}
+
+
+void MainWindow::on_helpButton_clicked()
+{
+    ui->helpButton->setToolTip("显示帮助文档");
+
+    ui->helpButton->setStyleSheet(
+                    "QPushButton{"
+                    "icon:url(:/new/prefix1/icons/help.png);"
+                    "background-color:rgba(0,0,0,0);}"
+                    "QPushButton:hover{"
+                    "icon:url(:/new/prefix1/icons/help_blue.png);}"
+            );
+    helpdialog->show();
+
 }
 
