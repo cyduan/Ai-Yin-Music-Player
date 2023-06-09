@@ -8,6 +8,8 @@
 int flag_love=0;
 int flag_mode=0;
 int flag_sound=0;
+int flag_next=0;
+int flag_doubleClick=0;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -40,12 +42,12 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->playSpacer,&QSlider::sliderMoved,mediaPlayer,&QMediaPlayer::setPosition);
     //自动播放下一首
     connect(mediaPlayer, &QMediaPlayer::playbackStateChanged, this, [=](){
-        if(mediaPlayer->playbackState() == QMediaPlayer::PlaybackState::StoppedState)
+        if(mediaPlayer->playbackState() == QMediaPlayer::PlaybackState::StoppedState&&!flag_next&&!flag_doubleClick)
         {   //筛选播放模式
             if(flag_mode==0){//列表循环
             curPlayIndex = (curPlayIndex +1 )%playList.size();
             ui->listWidget->setCurrentRow(curPlayIndex);
-            mediaPlayer->setSource  (playList[curPlayIndex]);
+            mediaPlayer->setSource(playList[curPlayIndex]);
             mediaPlayer->play();
             setButtonToPause();}
             else if(flag_mode==1){//单曲循环
@@ -68,7 +70,6 @@ MainWindow::MainWindow(QWidget *parent)
         }
     });
 
-
     //帮助界面
     helpdialog = new HelpDialog(this);
 }
@@ -88,23 +89,6 @@ void MainWindow:: setButtonToPause() //将按钮设置为暂停样式
     "QPushButton:hover{"
     "icon:url(:/new/prefix1/icons/suspend_blue.png);}"
     );
-}
-void MainWindow::on_pushButton_2_clicked() //喜不喜欢按钮
-{
-    switch (flag_love) {
-    case 0:
-        ui->pushButton_2->setToolTip("哼！不爱了！！！");
-        ui->pushButton_2->setIcon(QIcon(":/new/prefix1/icons/love.png"));
-        flag_love=(flag_love+1)%2;
-        break;
-    case 1:
-        ui->pushButton_2->setToolTip("啊！好爱~~");
-        ui->pushButton_2->setIcon(QIcon(":/new/prefix1/icons/dislike.png"));
-        flag_love=(flag_love+1)%2;
-        break;
-    default:
-        break;
-    }
 }
 
 
@@ -212,12 +196,30 @@ void MainWindow::on_pushButton_3_clicked() //上一首按钮
     {
         return;
     }
+    if(flag_mode!=2){
+    flag_next=true;
     //让listWiget选中上一行
     curPlayIndex = (curPlayIndex - 1+playList.size())%playList.size();
     ui->listWidget->setCurrentRow(curPlayIndex);
     mediaPlayer->setSource(playList[curPlayIndex]);
     mediaPlayer->play();
     setButtonToPause();
+    flag_next=false;}
+    else{
+    flag_next=true;
+    int number=0;
+    while (true) {
+            number=QRandomGenerator::global()->bounded(0,playList.size());
+            if(number!=curPlayIndex)
+                break;
+    }
+    curPlayIndex = number;
+    ui->listWidget->setCurrentRow(curPlayIndex);
+    mediaPlayer->setSource(playList[curPlayIndex]);
+    mediaPlayer->play();
+    setButtonToPause();
+    flag_next=false;
+    }
 }
 
 
@@ -228,12 +230,29 @@ void MainWindow::on_pushButton_5_clicked() //下一首按钮
         return;
     }
     //让listWiget选中下一行
-
+    if(flag_mode!=2)
+    {flag_next=true;
     curPlayIndex = (curPlayIndex +1 )%playList.size();
     ui->listWidget->setCurrentRow(curPlayIndex);
     mediaPlayer->setSource(playList[curPlayIndex]);
     mediaPlayer->play();
     setButtonToPause();
+    flag_next=false;}
+    else{
+    flag_next=true;
+    int number=0;
+    while (true) {
+            number=QRandomGenerator::global()->bounded(0,playList.size());
+            if(number!=curPlayIndex)
+                break;
+    }
+    curPlayIndex = number;
+    ui->listWidget->setCurrentRow(curPlayIndex);
+    mediaPlayer->setSource(playList[curPlayIndex]);
+    mediaPlayer->play();
+    setButtonToPause();
+    flag_next=false;
+    }
 }
 
 
@@ -243,10 +262,12 @@ void MainWindow::on_pushButton_5_clicked() //下一首按钮
 
 void MainWindow::on_listWidget_doubleClicked(const QModelIndex &index)//双击播放
 {
+    flag_doubleClick=1;
     curPlayIndex=index.row();
     mediaPlayer->setSource(playList[curPlayIndex]);
     mediaPlayer->play();
     setButtonToPause();
+    flag_doubleClick=false;
 }
 
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>605</height>
+    <width>965</width>
+    <height>617</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,8 +25,101 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0" rowspan="2">
+     <widget class="QListWidget" name="listWidget">
+      <property name="minimumSize">
+       <size>
+        <width>600</width>
+        <height>360</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QSlider" name="playSpacer">
+      <property name="maximumSize">
+       <size>
+        <width>1000</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0,0,0">
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="curLabel">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>00：00</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="songNameLabel">
+        <property name="text">
+         <string>暂无音乐</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="totalLabel">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>00：00</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
     <item row="4" column="0" colspan="3">
      <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
       <item>
        <widget class="QPushButton" name="pushButton">
         <property name="minimumSize">
@@ -77,13 +170,7 @@ icon:url(:/new/prefix1/icons/add_blue.png);
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_2">
-        <property name="minimumSize">
-         <size>
-          <width>50</width>
-          <height>50</height>
-         </size>
-        </property>
+       <widget class="QPushButton" name="helpButton">
         <property name="maximumSize">
          <size>
           <width>50</width>
@@ -93,41 +180,25 @@ icon:url(:/new/prefix1/icons/add_blue.png);
         <property name="cursor">
          <cursorShape>PointingHandCursor</cursorShape>
         </property>
-        <property name="toolTip">
-         <string>啊！好爱~~</string>
-        </property>
-        <property name="toolTipDuration">
-         <number>-1</number>
-        </property>
         <property name="styleSheet">
          <string notr="true">QPushButton{
-background-color: rgba(0, 0, 0,0);
+background-color:rgba(0,0,0,0);
 }
-QPushButton:pressed{
-icon:url(:/new/prefix1/icons/love.png);
-}</string>
+QPushButton:hover{
+icon:url(:/new/prefix1/icons/help_blue.png);}</string>
         </property>
         <property name="text">
          <string/>
         </property>
         <property name="icon">
          <iconset resource="icons.qrc">
-          <normaloff>:/new/prefix1/icons/dislike.png</normaloff>:/new/prefix1/icons/dislike.png</iconset>
+          <normaloff>:/new/prefix1/icons/help.png</normaloff>:/new/prefix1/icons/help.png</iconset>
         </property>
         <property name="iconSize">
          <size>
           <width>50</width>
           <height>50</height>
          </size>
-        </property>
-        <property name="checkable">
-         <bool>false</bool>
-        </property>
-        <property name="autoExclusive">
-         <bool>false</bool>
-        </property>
-        <property name="flat">
-         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -322,10 +393,12 @@ icon:url(:/new/prefix1/icons/delete_red.png)
          <cursorShape>PointingHandCursor</cursorShape>
         </property>
         <property name="styleSheet">
-         <string notr="true">QPushButton{
+         <string notr="true">*{
 background-color:rgba(0,0,0,0);
 }
-
+QPushButton:hover{
+icon:url(:/new/prefix1/icons/listCirculation_blue.png)
+}
 </string>
         </property>
         <property name="text">
@@ -384,101 +457,6 @@ background-color:rgba(0,0,0,0);
       </item>
      </layout>
     </item>
-    <item row="2" column="0">
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
-      <item>
-       <widget class="QLabel" name="curLabel">
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>00：00</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QLabel" name="songNameLabel">
-        <property name="text">
-         <string>暂无音乐</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QLabel" name="totalLabel">
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>00：00</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="3" column="0">
-     <widget class="QSlider" name="playSpacer">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0" rowspan="2">
-     <widget class="QListWidget" name="listWidget">
-      <property name="minimumSize">
-       <size>
-        <width>600</width>
-        <height>360</height>
-       </size>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="2">
-     <widget class="QPushButton" name="helpButton">
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset resource="icons.qrc">
-        <normaloff>:/new/prefix1/icons/help.png</normaloff>:/new/prefix1/icons/help.png</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>20</width>
-        <height>20</height>
-       </size>
-      </property>
-     </widget>
-    </item>
     <item row="2" column="1" rowspan="2">
      <widget class="QSlider" name="volumeSpacer">
       <property name="mouseTracking">
@@ -491,7 +469,6 @@ background-color:rgba(0,0,0,0);
     </item>
    </layout>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources>
   <include location="icons.qrc"/>
